@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
-import colors from '../utils/colors';
+import colors from '../../utils/colors';
 
 const UtilityButton = (props) => (
   <Button
@@ -13,6 +13,7 @@ const UtilityButton = (props) => (
       color: colors.black,
       backgroundColor: colors.white,
     }}
+    {...props}
   >
     {props.icon}
     <div>{props.name}</div>

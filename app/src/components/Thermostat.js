@@ -6,7 +6,7 @@ const Thermostat = (props) => {
     const difference = props.ambientTemperature - props.desiredTemperature;
     if (props.desiredTemperature > props.ambientTemperature) {
       dialColor = '#E36304';
-    } else if (props.desiredTemperature < props.ambientTemperature && difference > 5) {
+    } else if (props.desiredTemperature < props.ambientTemperature && difference >= 5) {
       dialColor = '#007AF1';
     }
 

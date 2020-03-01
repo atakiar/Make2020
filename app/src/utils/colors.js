@@ -14,6 +14,11 @@ const colors = Object.freeze({
   pink: 'rgb(255,45,85)',
   white: 'rgb(255,255,255)',
   black: 'rgb(0,0,0)',
+
+  // Utility Pallete
+  electric: '#fcdc4d',
+  water: '#30bced',
+  naturalgas: '#fc5130',
 });
 
 export default colors;
