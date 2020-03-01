@@ -33,7 +33,7 @@ const getMonthArray = () => {
   return arrayRotate(monthNames, currentMonth);
 };
 
-const getRandomArray = (length, min, max) => Array.from({ length }, () => Math.floor(Math.random() * (max - min + 1)) + min);
+const getRandomArray = (length, min, max) => Array.from({ length }, () => (Math.random() * (max - min + 1) + min).toFixed(2));
 
 export {
   arrayRotate, getDayArray, getMonthArray, getRandomArray,

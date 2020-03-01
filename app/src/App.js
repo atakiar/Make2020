@@ -5,6 +5,7 @@ import Slider from './components/Slider';
 import Modes from './components/Modes';
 import Utilities from './components/Utilities';
 import WeatherForecast from './components/WeatherForecast';
+import { getDayArray, getMonthArray, getRandomArray } from './utils/functions';
 
 const { Row, Column } = Grid;
 
@@ -19,6 +20,16 @@ class App extends Component {
 
     this.minTemperature = 50;
     this.maxTemperature = 85;
+
+    const dayArray = getDayArray();
+    const monthArray = getMonthArray();
+    this.data = {
+      dayArray,
+      monthArray,
+      electric: getRandomArray(dayArray.length, 1, 10),
+      naturalgas: getRandomArray(monthArray.length, 18, 54),
+      water: getRandomArray(monthArray.length, 2000, 10000),
+    };
   }
 
   handleThermostatChange = (event) => {
@@ -53,7 +64,7 @@ class App extends Component {
           </Column>
 
           <Column width={4}>
-            <Utilities />
+            <Utilities data={this.data} />
           </Column>
         </Row>
 

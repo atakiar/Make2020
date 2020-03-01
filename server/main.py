@@ -73,7 +73,7 @@ def getArduinoData():
     message = readFromArduino()
     if message and message != '' and message.replace(" ", "") != '':
         global ambientTemperature
-        ambientTemperature = int(message)
+        ambientTemperature = int(float(message))
 
 
 def sendArduinoData() -> None:

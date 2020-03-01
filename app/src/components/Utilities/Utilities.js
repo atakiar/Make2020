@@ -3,12 +3,8 @@ import { GiWaterDrop, GiElectric } from 'react-icons/gi';
 import { IoMdFlame } from 'react-icons/io';
 import UtilityModal from './UtilityModal';
 import colors from '../../utils/colors';
-import { getDayArray, getMonthArray, getRandomArray } from '../../utils/functions';
 
-const Utilities = () => {
-  const dayArray = getDayArray();
-  const monthArray = getMonthArray();
-
+const Utilities = (props) => {
   const utilities = [
     {
       name: 'Electricity Usage',
@@ -20,28 +16,11 @@ const Utilities = () => {
         options: {
           dataLabels: { enabled: false },
           stroke: { curve: 'smooth' },
-          xaxis: { categories: dayArray },
+          xaxis: { categories: props.data.dayArray },
           yaxis: { title: { text: 'Usage (kW)' } },
           colors: [colors.electric],
         },
-        series: [{ name: 'kW', data: getRandomArray(dayArray.length, 1, 10) }],
-      },
-    },
-    {
-      name: 'Water Usage',
-      trigger: {
-        name: 'Water',
-        icon: <GiWaterDrop />,
-      },
-      chart: {
-        options: {
-          dataLabels: { enabled: false },
-          stroke: { curve: 'smooth' },
-          xaxis: { categories: monthArray },
-          yaxis: { title: { text: 'Usage (gallons)' } },
-          colors: [colors.water],
-        },
-        series: [{ name: 'gallon', data: getRandomArray(monthArray.length, 18, 54) }],
+        series: [{ name: 'kW', data: props.data.electric }],
       },
     },
     {
@@ -54,11 +33,28 @@ const Utilities = () => {
         options: {
           dataLabels: { enabled: false },
           stroke: { curve: 'smooth' },
-          xaxis: { categories: monthArray },
+          xaxis: { categories: props.data.monthArray },
           yaxis: { title: { text: 'Usage (CCF)' } },
           colors: [colors.naturalgas],
         },
-        series: [{ name: 'CCF', data: getRandomArray(monthArray.length, 2000, 10000) }],
+        series: [{ name: 'CCF', data: props.data.naturalgas }],
+      },
+    },
+    {
+      name: 'Water Usage',
+      trigger: {
+        name: 'Water',
+        icon: <GiWaterDrop />,
+      },
+      chart: {
+        options: {
+          dataLabels: { enabled: false },
+          stroke: { curve: 'smooth' },
+          xaxis: { categories: props.data.monthArray },
+          yaxis: { title: { text: 'Usage (gallons)' } },
+          colors: [colors.water],
+        },
+        series: [{ name: 'gallon', data: props.data.water }],
       },
     },
   ];
