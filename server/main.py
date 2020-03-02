@@ -4,6 +4,7 @@ import threading
 from requests import get
 from typing import Any, Tuple
 from flask import Flask, jsonify
+from flask_cors import CORS
 
 # Weather
 WEATHER_URL = 'https://api.openweathermap.org/data/2.5/weather?id=4513057&appid=20479d1b73eacd0ef1c2bf44c8a36635&units=imperial'
@@ -14,6 +15,7 @@ AIO_KEY = 'aio_EjyW27l6g1QAuaZjm1c0Z444MNK6'
 AIO_SHOULD_SIMULATE = 'shouldsimulate'
 AIO_WEATHER_CODE = 'weathercode'
 AIO_EFFICIENCY = 'efficiency'
+AIO_CURRENT_ELECTRICITY_USAGE = 'currentelectricityusage'
 
 # Serial Setup
 ser = serial.Serial('/dev/ttyACM0', 9600)
@@ -21,7 +23,10 @@ time.sleep(2)
 
 # Flask Setup
 app = Flask(__name__)
+CORS(app)
 ambientTemperature = 74
+currentElectricityUsage = 10
+electricalEfficiency = 80
 
 
 # Data Helpers
@@ -48,10 +53,18 @@ def getWeatherData() -> Tuple[str, str]:
     return (temperature, weatherCode)
 
 
-def getEfficencyData() -> str:
+def getElectricityData() -> Tuple[str, str]:
     efficency = getDashboadData(AIO_EFFICIENCY)
     efficency = f'{int(efficency):03d}'
-    return efficency
+
+    usage = getDashboadData(AIO_CURRENT_ELECTRICITY_USAGE)
+    usage = f'{int(usage):03d}'
+
+    global currentElectricityUsage, electricalEfficiency
+    currentElectricityUsage = int(usage)
+    electricalEfficiency = int(efficency)
+
+    return (efficency, usage)
 
 
 # Arduino Helpers
@@ -78,16 +91,19 @@ def getArduinoData():
 
 def sendArduinoData() -> None:
     threading.Timer(3.0, sendArduinoData).start()
-    weather = getWeatherData()
-    efficency = getEfficencyData()
-    message = f'${weather[0]},{weather[1]},{efficency}'
+    temperature, weatherCode = getWeatherData()
+    efficency, usage = getElectricityData()
+    message = f'${temperature},{weatherCode},{efficency},{usage}'
     writeToArduino(message)
 
 
 # Flask Helpers
 @app.route('/')
 def root():
-    data = {'success': True, 'ambientTemperature': ambientTemperature}
+    data = {'success': True, 'ambientTemperature': ambientTemperature,
+            'currentElectricityUsage': currentElectricityUsage,
+            'electricalEfficiency': electricalEfficiency
+            }
     return jsonify(data)
 
 
